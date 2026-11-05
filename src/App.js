@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   Navigate,
@@ -208,8 +208,8 @@ function EstructuraPublica() {
 // Aplicación principal
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <EstructuraPublica />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
