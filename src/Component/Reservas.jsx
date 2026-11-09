@@ -5,7 +5,7 @@ const MesasIniciales = [
   { id: 1, numero: 1, nombre: 'Mesa 1 · Ventana', capacidad: 2, zona: 'Interior', estado: 'activo' },
   { id: 2, numero: 2, nombre: 'Mesa 2 · Romántica', capacidad: 2, zona: 'Terraza', estado: 'activo' },
   { id: 3, numero: 3, nombre: 'Mesa 3 · Central', capacidad: 4, zona: 'Interior', estado: 'activo' },
-  { id: 4, numero: 4, nombre: 'Mesa 4 · Familiar', capacidad: 4, zona: 'Terraza', estado: 'activo' },
+  { id: 4, numero: 4, nombre: 'Mesa 4 · Familiar', capacidad: 10, zona: 'Terraza', estado: 'activo' },
   { id: 5, numero: 5, nombre: 'Mesa 5 · VIP', capacidad: 6, zona: 'Salón Privado', estado: 'activo' },
 ];
 
