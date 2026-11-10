@@ -8,7 +8,7 @@ export default function Inicio() {
       <div 
         className="position-relative text-white py-5 mb-5 overflow-hidden rounded-bottom-5 shadow-lg"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.75)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.75)), url('img/inicio-hero.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           minHeight: '520px',

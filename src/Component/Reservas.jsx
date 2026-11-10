@@ -2,22 +2,56 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const MesasIniciales = [
-  { id: 1, numero: 1, nombre: 'Mesa 1 · Ventana', capacidad: 2, zona: 'Interior', estado: 'activo' },
-  { id: 2, numero: 2, nombre: 'Mesa 2 · Romántica', capacidad: 2, zona: 'Terraza', estado: 'activo' },
-  { id: 3, numero: 3, nombre: 'Mesa 3 · Central', capacidad: 4, zona: 'Interior', estado: 'activo' },
-  { id: 4, numero: 4, nombre: 'Mesa 4 · Familiar', capacidad: 4, zona: 'Terraza', estado: 'activo' },
-  { id: 5, numero: 5, nombre: 'Mesa 5 · VIP', capacidad: 6, zona: 'Salón Privado', estado: 'activo' },
+  // Mesas para 1 persona
+  { id: 1, numero: 1, nombre: 'Mesa 1 · Individual', capacidad: 1, zona: 'Interior', estado: 'activo' },
+  { id: 2, numero: 2, nombre: 'Mesa 2 · Individual', capacidad: 1, zona: 'Terraza', estado: 'activo' },
+
+  // Mesas para 2 personas
+  { id: 3, numero: 3, nombre: 'Mesa 3 · Ventana', capacidad: 2, zona: 'Interior', estado: 'activo' },
+  { id: 4, numero: 4, nombre: 'Mesa 4 · Romántica', capacidad: 2, zona: 'Terraza', estado: 'activo' },
+
+  // Mesas para 3 personas
+  { id: 5, numero: 5, nombre: 'Mesa 5 · Familiar', capacidad: 3, zona: 'Interior', estado: 'activo' },
+  { id: 6, numero: 6, nombre: 'Mesa 6 · Terraza', capacidad: 3, zona: 'Terraza', estado: 'activo' },
+
+  // Mesas para 4 personas
+  { id: 7, numero: 7, nombre: 'Mesa 7 · Central', capacidad: 4, zona: 'Interior', estado: 'activo' },
+  { id: 8, numero: 8, nombre: 'Mesa 8 · Familiar', capacidad: 4, zona: 'Terraza', estado: 'activo' },
+
+  // Mesas para 5 personas
+  { id: 9, numero: 9, nombre: 'Mesa 9 · Grupo', capacidad: 5, zona: 'Interior', estado: 'activo' },
+  { id: 10, numero: 10, nombre: 'Mesa 10 · Grupo', capacidad: 5, zona: 'Terraza', estado: 'activo' },
+
+  // Mesas para 6 personas
+  { id: 11, numero: 11, nombre: 'Mesa 11 · VIP', capacidad: 6, zona: 'Salón Privado', estado: 'activo' },
+  { id: 12, numero: 12, nombre: 'Mesa 12 · Familiar', capacidad: 6, zona: 'Interior', estado: 'activo' },
+
+  // Mesas para 7 personas
+  { id: 13, numero: 13, nombre: 'Mesa 13 · Grupo Grande', capacidad: 7, zona: 'Terraza', estado: 'activo' },
+  { id: 14, numero: 14, nombre: 'Mesa 14 · Grupo Grande', capacidad: 7, zona: 'Salón Privado', estado: 'activo' },
+
+  // Mesas para 8 personas
+  { id: 15, numero: 15, nombre: 'Mesa 15 · Familiar Grande', capacidad: 8, zona: 'Interior', estado: 'activo' },
+  { id: 16, numero: 16, nombre: 'Mesa 16 · Familiar Grande', capacidad: 8, zona: 'Terraza', estado: 'activo' },
+
+  // Mesas para 9 personas
+  { id: 17, numero: 17, nombre: 'Mesa 17 · Evento', capacidad: 9, zona: 'Salón Privado', estado: 'activo' },
+  { id: 18, numero: 18, nombre: 'Mesa 18 · Evento', capacidad: 9, zona: 'Interior', estado: 'activo' },
+
+  // Mesas para 10 personas
+  { id: 19, numero: 19, nombre: 'Mesa 19 · VIP Grande', capacidad: 10, zona: 'Salón Privado', estado: 'activo' },
+  { id: 20, numero: 20, nombre: 'Mesa 20 · VIP Grande', capacidad: 10, zona: 'Terraza', estado: 'activo' },
 ];
 
 const horarios = [
-  '08:00',
-  '10:00',
-  '12:00',
-  '14:00',
-  '16:00',
-  '18:00',
-  '20:00',
-  '22:00',
+  '08:00 AM',
+  '10:00 AM',
+  '12:00 PM',
+  '02:00 PM',
+  '04:00 PM',
+  '06:00 PM',
+  '08:00 PM',
+  '10:00 PM',
 ];
 
 function obtenerFechaLocal() {
