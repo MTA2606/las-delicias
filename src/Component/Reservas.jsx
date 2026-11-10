@@ -65,30 +65,33 @@ function cargarReservas() {
 
 function cargarMesas() {
   try {
-    const datos = JSON.parse(localStorage.getItem('mesasRestaurante') || '[]');
+    // Cambiamos la clave a 'mesasRestaurante_v2' para forzar la carga limpia de las 20 mesas
+    const CLAVE_STORAGE = 'mesasRestaurante_v2';
+    const datos = JSON.parse(localStorage.getItem(CLAVE_STORAGE) || '[]');
 
     if (Array.isArray(datos) && datos.length > 0) {
-      // Conserva los cambios hechos desde administración y agrega las mesas nuevas.
       const mesasGuardadas = new Map(datos.map((mesa) => [Number(mesa.id), mesa]));
+      
       const mesasActualizadas = MesasIniciales.map((mesa) => {
         const guardada = mesasGuardadas.get(mesa.id);
         return guardada
-          ? { ...mesa, ...guardada, estado: guardada.estado || 'activo' }
+          ? { 
+              ...guardada, 
+              ...mesa, // Asegura que la capacidad y nombre de MesasIniciales siempre se actualicen
+              estado: guardada.estado || 'activo' 
+            }
           : mesa;
       });
 
-      // Conserva también cualquier mesa adicional creada desde administración.
       const idsIniciales = new Set(MesasIniciales.map((mesa) => mesa.id));
       const mesasAdicionales = datos.filter((mesa) => !idsIniciales.has(Number(mesa.id)));
 
-      localStorage.setItem(
-        'mesasRestaurante',
-        JSON.stringify([...mesasActualizadas, ...mesasAdicionales])
-      );
-      return [...mesasActualizadas, ...mesasAdicionales];
+      const resultado = [...mesasActualizadas, ...mesasAdicionales];
+      localStorage.setItem(CLAVE_STORAGE, JSON.stringify(resultado));
+      return resultado;
     }
 
-    localStorage.setItem('mesasRestaurante', JSON.stringify(MesasIniciales));
+    localStorage.setItem(CLAVE_STORAGE, JSON.stringify(MesasIniciales));
     return MesasIniciales;
   } catch {
     return MesasIniciales;
