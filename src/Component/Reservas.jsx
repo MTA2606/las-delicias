@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const MesasIniciales = [
+<<<<<<< HEAD
   // Mesas para 1 persona
   { id: 1, numero: 1, nombre: 'Mesa 1 · Individual', capacidad: 1, zona: 'Interior', estado: 'activo' },
   { id: 2, numero: 2, nombre: 'Mesa 2 · Individual', capacidad: 1, zona: 'Terraza', estado: 'activo' },
@@ -41,6 +42,13 @@ const MesasIniciales = [
   // Mesas para 10 personas
   { id: 19, numero: 19, nombre: 'Mesa 19 · VIP Grande', capacidad: 10, zona: 'Salón Privado', estado: 'activo' },
   { id: 20, numero: 20, nombre: 'Mesa 20 · VIP Grande', capacidad: 10, zona: 'Terraza', estado: 'activo' },
+=======
+  { id: 1, numero: 1, nombre: 'Mesa 1 · Ventana', capacidad: 2, zona: 'Interior', estado: 'activo' },
+  { id: 2, numero: 2, nombre: 'Mesa 2 · Romántica', capacidad: 2, zona: 'Terraza', estado: 'activo' },
+  { id: 3, numero: 3, nombre: 'Mesa 3 · Central', capacidad: 4, zona: 'Interior', estado: 'activo' },
+  { id: 4, numero: 4, nombre: 'Mesa 4 · Familiar', capacidad: 10, zona: 'Terraza', estado: 'activo' },
+  { id: 5, numero: 5, nombre: 'Mesa 5 · VIP', capacidad: 6, zona: 'Salón Privado', estado: 'activo' },
+>>>>>>> 0a3d0c9cb819347cca8c485d05b7e47121445939
 ];
 
 const horarios = [
