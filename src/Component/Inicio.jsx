@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 export default function Inicio() {
   return (
     <div>
@@ -8,7 +9,7 @@ export default function Inicio() {
       <div 
         className="position-relative text-white py-5 mb-5 overflow-hidden rounded-bottom-5 shadow-lg"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.75)), url('img/inicio-hero.jpg')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.75)), url('./img/inicio.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           minHeight: '520px',
@@ -58,7 +59,7 @@ export default function Inicio() {
             <div className="card border-0 shadow-sm rounded-4 h-100 overflow-hidden bg-white transition-all hover-shadow">
               <div style={{ height: '185px' }} className="overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=80" 
+                  src="img/1de3inicio.png" 
                   alt="Mesas del restaurante" 
                   className="w-100 h-100 object-fit-cover"
                 />

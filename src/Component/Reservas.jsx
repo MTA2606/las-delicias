@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-// Dos mesas por cada capacidad: de 1 a 10 personas.
 const MesasIniciales = [
   { id: 1, numero: 1, nombre: 'Mesa 1 · Individual', capacidad: 1, zona: 'Interior', estado: 'activo' },
   { id: 2, numero: 2, nombre: 'Mesa 2 · Individual', capacidad: 1, zona: 'Terraza', estado: 'activo' },
@@ -26,14 +25,8 @@ const MesasIniciales = [
 ];
 
 const horarios = [
-  '08:00 AM',
-  '10:00 AM',
-  '12:00 PM',
-  '02:00 PM',
-  '04:00 PM',
-  '06:00 PM',
-  '08:00 PM',
-  '10:00 PM',
+  '08:00', '10:00', '12:00', '14:00',
+  '16:00', '18:00', '20:00', '22:00'
 ];
 
 function obtenerFechaLocal() {
@@ -94,9 +87,6 @@ export default function Reservas() {
   const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
 
   const [nombreCliente, setNombreCliente] = useState('');
-  const [telefonoCliente, setTelefonoCliente] = useState('');
-  const [correoCliente, setCorreoCliente] = useState('');
-  const [notas, setNotas] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
 
   useEffect(() => {
@@ -104,7 +94,6 @@ export default function Reservas() {
     setReservas(cargarReservas());
   }, [location]);
 
-  // Verifica si una mesa ya está reservada en esa fecha y hora
   const estaOcupada = (mesaId) => {
     return reservas.some(
       (r) =>
@@ -115,13 +104,27 @@ export default function Reservas() {
     );
   };
 
-  // Filtra las mesas permitiendo hasta 10 personas
   const mesasDisponibles = mesas.filter((mesa) => {
     const activa = (mesa.estado || 'activo') === 'activo';
     const coincideCapacidad = Number(mesa.capacidad) >= Number(personas);
     const coincideZona = zona === 'Todas' || mesa.zona === zona;
     return activa && coincideCapacidad && coincideZona;
   });
+
+  const cambiarHora = (nuevaHora) => {
+    setHora(nuevaHora);
+    setMesaSeleccionada(null);
+  };
+
+  const cambiarFecha = (nuevaFecha) => {
+    setFecha(nuevaFecha);
+    setMesaSeleccionada(null);
+  };
+
+  const cambiarPersonas = (nuevasPersonas) => {
+    setPersonas(nuevasPersonas);
+    setMesaSeleccionada(null);
+  };
 
   const confirmarReserva = (e) => {
     e.preventDefault();
@@ -137,9 +140,6 @@ export default function Reservas() {
       hora,
       personas: Number(personas),
       cliente: nombreCliente,
-      telefono: telefonoCliente,
-      correo: correoCliente,
-      notas,
       estado: 'confirmada',
     };
 
@@ -147,21 +147,19 @@ export default function Reservas() {
     setReservas(nuevasReservas);
     localStorage.setItem('reservas', JSON.stringify(nuevasReservas));
 
-    setMensajeExito(`¡Reserva confirmada en ${mesaSeleccionada.nombre} para ${personas} persona(s) el ${fecha} a las ${hora}!`);
+    setMensajeExito(`¡Reserva confirmada en ${mesaSeleccionada.nombre} para ${personas} personas el ${fecha} a las ${hora}!`);
     setMesaSeleccionada(null);
     setNombreCliente('');
-    setTelefonoCliente('');
-    setCorreoCliente('');
-    setNotas('');
   };
 
   return (
-    <div className="container py-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Reserva tu Mesa en Las Delicias</h2>
-        <Link to="/" className="btn btn-outline-secondary">
-          Volver al Inicio
-        </Link>
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 className="fw-bold mb-1" style={{ color: '#212529' }}>Reserva tu Mesa</h2>
+          <p className="text-muted small mb-0">Elige tu fecha, horario y selecciona tu mesa favorita en el mapa.</p>
+        </div>
+        <Link to="/" className="btn btn-outline-secondary btn-sm">Volver al Inicio</Link>
       </div>
 
       {mensajeExito && (
@@ -171,203 +169,167 @@ export default function Reservas() {
         </div>
       )}
 
-      {/* Filtros de búsqueda */}
-      <div className="card shadow-sm mb-4">
-        <div className="card-body">
-          <div className="row g-3">
-            <div className="col-md-3">
-              <label className="form-label fw-semibold">Fecha</label>
-              <input
-                type="date"
-                className="form-control"
-                min={obtenerFechaLocal()}
-                value={fecha}
-                onChange={(e) => {
-                  setFecha(e.target.value);
-                  setMesaSeleccionada(null);
-                }}
-              />
+      <div className="row g-4">
+        {/* Columna Izquierda: Datos y Horario (Estilo de la imagen de referencia) */}
+        <div className="col-lg-5">
+          <div className="card shadow-sm border-0">
+            <div className="card-header text-white fw-bold py-3" style={{ backgroundColor: '#dc3545' }}>
+              1. Tus Datos y Horario
             </div>
+            <div className="card-body">
+              <form onSubmit={confirmarReserva}>
+                <div className="mb-3">
+                  <label className="form-label small fw-semibold text-muted">Nombre completo *</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    required
+                    value={nombreCliente}
+                    onChange={(e) => setNombreCliente(e.target.value)}
+                    placeholder="Ingrese su nombre"
+                  />
+                </div>
 
-            <div className="col-md-3">
-              <label className="form-label fw-semibold">Horario (Turnos de 2h)</label>
-              <select
-                className="form-select"
-                value={hora}
-                onChange={(e) => {
-                  setHora(e.target.value);
-                  setMesaSeleccionada(null);
-                }}
-              >
-                {horarios.map((h) => (
-                  <option key={h} value={h}>
-                    {h}
-                  </option>
-                ))}
-              </select>
+                <div className="row mb-3">
+                  <div className="col-7">
+                    <label className="form-label small fw-semibold text-muted">Fecha *</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      required
+                      min={obtenerFechaLocal()}
+                      value={fecha}
+                      onChange={(e) => cambiarFecha(e.target.value)}
+                    />
+                  </div>
+                  <div className="col-5">
+                    <label className="form-label small fw-semibold text-muted">Personas *</label>
+                    <select
+                      className="form-select"
+                      required
+                      value={personas}
+                      onChange={(e) => cambiarPersonas(Number(e.target.value))}
+                    >
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                        <option key={`pers-${num}`} value={num}>
+                          {num} {num === 1 ? 'persona' : 'personas'}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label small fw-semibold text-muted">Horario disponible *</label>
+                  <div className="row g-2">
+                    {horarios.map((h) => {
+                      const esSeleccionado = hora === h;
+                      return (
+                        <div className="col-6" key={`horario-${h}`}>
+                          <button
+                            type="button"
+                            className="btn w-100 btn-sm py-2"
+                            style={{
+                              backgroundColor: esSeleccionado ? '#dc3545' : '#fff',
+                              color: esSeleccionado ? '#fff' : '#dc3545',
+                              border: '1px solid #dc3545',
+                              fontWeight: esSeleccionado ? 'bold' : 'normal'
+                            }}
+                            onClick={() => cambiarHora(h)}
+                          >
+                            {h}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {mesaSeleccionada && (
+                  <button type="submit" className="btn w-100 mt-3 fw-bold text-white" style={{ backgroundColor: '#dc3545' }}>
+                    Confirmar Reserva ({mesaSeleccionada.nombre})
+                  </button>
+                )}
+              </form>
             </div>
+          </div>
+        </div>
 
-            <div className="col-md-3">
-              <label className="form-label fw-semibold">Número de Personas</label>
-              <select
-                className="form-select"
-                value={personas}
-                onChange={(e) => {
-                  setPersonas(Number(e.target.value));
-                  setMesaSeleccionada(null);
-                }}
-              >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                  <option key={num} value={num}>
-                    {num} {num === 1 ? 'persona' : 'personas'}
-                  </option>
-                ))}
-              </select>
+        {/* Columna Derecha: Selección de Mesa (Estilo limpio e idéntico al diseño de referencia) */}
+        <div className="col-lg-7">
+          <div className="card shadow-sm border-0 h-100">
+            <div className="card-header text-white fw-bold py-3 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#212529' }}>
+              <span>2. Escoge tu Mesa</span>
+              <div className="d-flex gap-2 small">
+                <span className="badge" style={{ backgroundColor: '#198754' }}>Libre</span>
+                <span className="badge" style={{ backgroundColor: '#dc3545' }}>Elegida</span>
+                <span className="badge" style={{ backgroundColor: '#6c757d' }}>Ocupada / Inhabilitada</span>
+              </div>
             </div>
+            <div className="card-body d-flex flex-column justify-content-between">
+              <div>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <span className="text-muted small">Mesas aptas para {personas} personas</span>
+                  <select
+                    className="form-select form-select-sm w-auto"
+                    value={zona}
+                    onChange={(e) => setZona(e.target.value)}
+                  >
+                    <option value="Todas">Todas las zonas</option>
+                    <option value="Interior">Interior</option>
+                    <option value="Terraza">Terraza</option>
+                    <option value="Salón Privado">Salón Privado</option>
+                  </select>
+                </div>
 
-            <div className="col-md-3">
-              <label className="form-label fw-semibold">Zona</label>
-              <select
-                className="form-select"
-                value={zona}
-                onChange={(e) => {
-                  setZona(e.target.value);
-                  setMesaSeleccionada(null);
-                }}
-              >
-                <option value="Todas">Todas las zonas</option>
-                <option value="Interior">Interior</option>
-                <option value="Terraza">Terraza</option>
-                <option value="Salón Privado">Salón Privado</option>
-              </select>
+                {mesasDisponibles.length === 0 ? (
+                  <div className="text-center py-5 text-muted">
+                    <p className="mb-1">No hay mesas disponibles con capacidad para {personas} personas.</p>
+                    <small>Prueba seleccionando menos personas o cambiando de zona/horario.</small>
+                  </div>
+                ) : (
+                  <div className="row g-2" style={{ maxHeight: '420px', overflowY: 'auto' }}>
+                    {mesasDisponibles.map((mesa) => {
+                      const ocupada = estaOcupada(mesa.id);
+                      const seleccionada = mesaSeleccionada?.id === mesa.id;
+
+                      let estilosTarjeta = { backgroundColor: '#f8f9fa', color: '#212529', border: '1px solid #dee2e6' };
+                      if (ocupada) estilosTarjeta = { backgroundColor: '#6c757d', color: '#fff', opacity: '0.6', border: 'none' };
+                      if (seleccionada) estilosTarjeta = { backgroundColor: '#dc3545', color: '#fff', border: '1px solid #dc3545' };
+
+                      return (
+                        <div className="col-6 col-md-4" key={`mesa-item-${mesa.id}`}>
+                          <div
+                            onClick={() => !ocupada && setMesaSeleccionada(mesa)}
+                            className="p-2 rounded transition-all shadow-sm"
+                            style={{ cursor: ocupada ? 'not-allowed' : 'pointer', minHeight: '75px', ...estilosTarjeta }}
+                          >
+                            <div className="fw-bold small">{mesa.nombre}</div>
+                            <div className="small opacity-75" style={{ fontSize: '11px' }}>Cap: {mesa.capacidad} | {mesa.zona}</div>
+                            <div className="badge mt-1 font-monospace" style={{ fontSize: '9px', backgroundColor: ocupada ? '#495057' : seleccionada ? '#a71d2a' : '#198754' }}>
+                              {ocupada ? 'Ocupada' : seleccionada ? 'Seleccionada' : 'Libre'}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {!mesaSeleccionada ? (
+                <div className="text-center py-3 mt-3 rounded text-white fw-bold" style={{ backgroundColor: '#f8d7da', color: '#842029 !important', border: '1px solid #f5c2c7' }}>
+                  <span style={{ color: '#842029' }}>Selecciona una mesa para confirmar</span>
+                </div>
+              ) : (
+                <div className="alert alert-danger mt-3 mb-0 py-2 text-center small fw-bold">
+                  Mesa seleccionada: {mesaSeleccionada.nombre} (Capacidad: {mesaSeleccionada.capacidad})
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Lista de Mesas */}
-      <h4 className="mb-3">Mesas Disponibles ({mesasDisponibles.length})</h4>
-      {mesasDisponibles.length === 0 ? (
-        <div className="alert alert-warning">
-          No hay mesas disponibles con capacidad para {personas} personas en la zona seleccionada.
-        </div>
-      ) : (
-        <div className="row g-3 mb-4">
-          {mesasDisponibles.map((mesa) => {
-            const ocupada = estaOcupada(mesa.id);
-            const seleccionada = mesaSeleccionada?.id === mesa.id;
-
-            return (
-              <div key={mesa.id} className="col-md-4 col-lg-3">
-                <div
-                  className={`card h-100 shadow-sm ${
-                    ocupada
-                      ? 'border-danger bg-light text-muted'
-                      : seleccionada
-                      ? 'border-primary border-2'
-                      : 'border-success'
-                  }`}
-                >
-                  <div className="card-body d-flex flex-column justify-content-between">
-                    <div>
-                      <div className="d-flex justify-content-between align-items-start mb-2">
-                        <h5 className="card-title fw-bold mb-0">{mesa.nombre}</h5>
-                        <span className={`badge ${ocupada ? 'bg-danger' : 'bg-success'}`}>
-                          {ocupada ? 'Ocupada' : 'Libre'}
-                        </span>
-                      </div>
-                      <p className="card-text mb-1">
-                        <strong>Capacidad:</strong> Hasta {mesa.capacidad} personas
-                      </p>
-                      <p className="card-text text-secondary small mb-3">
-                        <strong>Zona:</strong> {mesa.zona}
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      className={`btn w-100 ${
-                        ocupada
-                          ? 'btn-secondary'
-                          : seleccionada
-                          ? 'btn-primary'
-                          : 'btn-outline-success'
-                      }`}
-                      disabled={ocupada}
-                      onClick={() => setMesaSeleccionada(mesa)}
-                    >
-                      {ocupada ? 'No disponible' : seleccionada ? 'Mesa Seleccionada' : 'Seleccionar'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Formulario para confirmar reserva */}
-      {mesaSeleccionada && (
-        <div className="card shadow border-primary">
-          <div className="card-header bg-primary text-white fw-bold">
-            Completar Reserva · {mesaSeleccionada.nombre} ({fecha} - {hora})
-          </div>
-          <div className="card-body">
-            <form onSubmit={confirmarReserva} className="row g-3">
-              <div className="col-md-4">
-                <label className="form-label">Nombre Completo *</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  required
-                  value={nombreCliente}
-                  onChange={(e) => setNombreCliente(e.target.value)}
-                />
-              </div>
-              <div className="col-md-4">
-                <label className="form-label">Teléfono *</label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  required
-                  value={telefonoCliente}
-                  onChange={(e) => setTelefonoCliente(e.target.value)}
-                />
-              </div>
-              <div className="col-md-4">
-                <label className="form-label">Correo Electrónico</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={correoCliente}
-                  onChange={(e) => setCorreoCliente(e.target.value)}
-                />
-              </div>
-              <div className="col-12">
-                <label className="form-label">Notas adicionales (alergias, ocasión especial)</label>
-                <textarea
-                  className="form-control"
-                  rows="2"
-                  value={notas}
-                  onChange={(e) => setNotas(e.target.value)}
-                ></textarea>
-              </div>
-              <div className="col-12 d-flex justify-content-end gap-2">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={() => setMesaSeleccionada(null)}
-                >
-                  Cancelar
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Confirmar Reserva
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
