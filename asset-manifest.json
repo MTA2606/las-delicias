@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/las-delicias/static/css/main.b344d86d.css",
-    "main.js": "/las-delicias/static/js/main.118d965a.js",
+    "main.js": "/las-delicias/static/js/main.69a9093c.js",
     "static/js/453.f28db76b.chunk.js": "/las-delicias/static/js/453.f28db76b.chunk.js",
     "index.html": "/las-delicias/index.html",
     "main.b344d86d.css.map": "/las-delicias/static/css/main.b344d86d.css.map",
-    "main.118d965a.js.map": "/las-delicias/static/js/main.118d965a.js.map",
+    "main.69a9093c.js.map": "/las-delicias/static/js/main.69a9093c.js.map",
     "453.f28db76b.chunk.js.map": "/las-delicias/static/js/453.f28db76b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b344d86d.css",
-    "static/js/main.118d965a.js"
+    "static/js/main.69a9093c.js"
   ]
 }
